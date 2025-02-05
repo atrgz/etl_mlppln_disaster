@@ -41,9 +41,9 @@ python data/process_data.py data/disaster_messages.csv data/disaster_categories.
 ```bash
 python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl
 ```
-2. To launch the web app, go to `app` directory: `cd app`
+2. To launch the web app, go to `app` directory
 
-* Run web app
+* Once in the app directory, run web app
 ```bash
 python run.py
 ```
