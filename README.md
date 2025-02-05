@@ -15,6 +15,8 @@ This project is written in Python 3.6.3 using the following  libraries:
 * sklearn 0.19.1
 * pickle 4.0
 * re 2.2.1
+* plotly 2.0.15
+* flask 0.12.5
 
 ## Project Motivations
 This work is the result of the project for the **Data Engineering** module of the [Data Scientist Nanodegree of Udacity](https://www.udacity.com/course/data-scientist-nanodegree--nd025?promo=year_end&coupon=SAVE40&utm_source=gsem_brand&utm_source=gsem_brand&utm_medium=ads_r&utm_medium=ads_r&utm_campaign=19167921312_c_individuals&utm_campaign=19167921312_c_individuals&utm_term=143524475679&utm_term=143524475679&utm_keyword=udacity%20data%20science_e&utm_keyword=udacity%20data%20science_e&gad_source=1&gclid=EAIaIQobChMImKz0y_e0gwMVfj4GAB1FgAEHEAAYASAAEgI-h_D_BwE).
@@ -46,6 +48,8 @@ The file structure of the projects is as follows:
 - models
 |- train_classifier.py # builds, trains and evaluates a model based in the database provided
 |- classifier.pkl  # saved model
+
+Please note that if the database already have a table called "Message" an error will happen
 
 ## Licensing, Authors and Acknowledgments
 This project has no specific license, but makes extensive use of the templates provided in the Udacity course.
