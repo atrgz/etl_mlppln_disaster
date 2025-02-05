@@ -19,6 +19,16 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 def load_data(database_filepath):
+    """Load message database and extract name of category columns
+
+    INPUT:
+    database_filepath: database with the data to generate a ML model
+
+    OUTPUT:
+    X: numpy array with the features
+    Y: numpy array with the targets
+    category_names: list with the name of the categories
+    """
     engine = create_engine(f'sqlite:///{database_filepath}')
     df = pd.read_sql_table('Message', engine)
     X = df.message.values
@@ -29,11 +39,19 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
-    text = re.sub(r"[^a-zA-Z0-9]", " ", text.lower())
+    """Normalize, tokenize and lemmatize text
+
+    INPUT:
+    text: a text string
+
+    OUTPUT:
+    clean_tokens: an array containing the tokenization of the text input
+    """
+    text = re.sub(r"[^a-zA-Z0-9]", " ", text.lower()) # keep only letters and numbers, normalize to lower case
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
     
-    tokens = [t for t in tokens if t not in stopwords.words("english")]
+    tokens = [t for t in tokens if t not in stopwords.words("english")] # get rid of stop words
 
     clean_tokens = []
     for tok in tokens:
@@ -44,13 +62,21 @@ def tokenize(text):
 
 
 def build_model():
+    """Build a pipeline for a ML model and optimize parameters with grid search
+
+    INPUT:
+    None
+
+    OUTPUT:
+    cv: ML model
+    """
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
         ('clf', MultiOutputClassifier(RandomForestClassifier())),
     ])
     
-    '''
+    
     parameters = {
         'vect__ngram_range': ((1, 1), (1, 2)),
         'clf__estimator__n_estimators': [10, 50, 100],
@@ -60,15 +86,25 @@ def build_model():
     cv = GridSearchCV(pipeline, param_grid=parameters)
     
     return cv
-    '''
-    return pipeline
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
-    Y_pred = model.predict(X_test)
+    """Estimate and evaluate ML model
+
+    INPUT:
+    model: a machine learning model
+    X_test: a features array to make predictions
+    Y_test: a target array to evaluate predictions
+    category_names: a list of category names to present results
+
+    OUTPUT:
+    None
+    """
+    Y_pred = model.predict(X_test) # make predictions using the model
+    # interate each category to evaluate model
     for i in range(Y_pred.shape[1]):
         report = classification_report(Y_test[:, i], Y_pred[:, i])
-        # Extract macro-average line manually
+        # Extract results line manually. Jupyter and IDE in Udacity works with an old version of sklearn. Newer versions allow to get the report as a dictionary.
         lines = report.split("\n")
         avg_line = [line for line in lines if "avg / total" in line]
         if avg_line:
@@ -78,11 +114,21 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 
 def save_model(model, model_filepath):
+    """Save the model to a pickle file
+
+    INPUT:
+    model: a machine learning model
+    model_filepath: desired name for the pickle file
+
+    OUTPUT:
+    None
+    """
     with open(model_filepath, "wb") as file:
         pickle.dump(model, file)
 
 
 def main():
+    # check the numer of arguments
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))

@@ -1,3 +1,4 @@
+# Import libraries
 import sys
 import pandas as pd
 from sqlalchemy import create_engine
@@ -5,7 +6,7 @@ from sqlalchemy import create_engine
 def load_data(messages_filepath, categories_filepath):
     """Load and merge the data from two CSV files to a dataframe.
 
-    IMPUT:
+    INPUT:
     messages_filepath: CSV file containing the messages received by the disaster recovery teams.
     The file has 4 colums; id (message id), message (message text in English), 
     original (message in the language it was received or blank if it was originaly in English),
@@ -69,21 +70,21 @@ def save_data(df, database_filename):
 
 
 def main():
-    #Make sure the user provided the required arguments
+    # Make sure the user provided the required arguments
     if len(sys.argv) == 4:
 
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
 
-        #Load the CSV data in a dataframe
+        # Load the CSV data in a dataframe
         print('Loading data...\n    MESSAGES: {}\n    CATEGORIES: {}'
               .format(messages_filepath, categories_filepath))
         df = load_data(messages_filepath, categories_filepath)
 
-        #Clean the dataframe
+        # Clean the dataframe
         print('Cleaning data...')
         df = clean_data(df)
         
-        #Save the dataframe to a SQLite database
+        # Save the dataframe to a SQLite database
         print('Saving data...\n    DATABASE: {}'.format(database_filepath))
         save_data(df, database_filepath)
         
