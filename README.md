@@ -31,22 +31,28 @@ To achieve this goal, the data stored in CSV files is managed using an ETL pipel
 The results of the model and a few visualizations of the database can be seen in a web app created with Flask.
 
 ## Instructions:
-Run the following commands in the project's root directory to set up your database and model.
+1. Run the following commands in the project's root directory to set up your database and model.
 
-To run ETL pipeline that cleans data and stores in database
-    `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
-To run ML pipeline that trains classifier and saves
-    `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
+* To run ETL pipeline that cleans data and stores in database
+```bash
+python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db
+```
+* To run ML pipeline that trains classifier and saves
+```bash
+python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl
+```
+2. To launch the web app, go to `app` directory: `cd app`
 
-Go to `app` directory: `cd app`
-
-Run web app: `python run.py`
+* Run web app
+```bash
+python run.py
+```
 
 Click the `PREVIEW` button to open the homepage
 
 ## File Descriptions
 The file structure of the projects is as follows:
-'''
+```
 - app
 | - template
 | |- master.html  # main page of web app
@@ -57,12 +63,12 @@ The file structure of the projects is as follows:
 |- disaster_categories.csv  # data to process 
 |- disaster_messages.csv  # data to process
 |- process_data.py # cleans data and stores it in a table called "Message" in a SQLite database
-|- DisasterResponse.db   # database to save clean data to
+|- DisasterResponse.db   # database to save clean data to (will be created if it doesn't exist)
 
 - models
 |- train_classifier.py # builds, trains and evaluates a model based in the database provided
-|- classifier.pkl  # saved model
-'''
+|- classifier.pkl  # saved model (will be created if it doesn't exist)
+```
 
 Please note that if the database already have a table called "Message" an error will happen
 
