@@ -21,6 +21,13 @@ This project is written in Python 3.6.3 using the following  libraries:
 ## Project Motivations
 This work is the result of the project for the **Data Engineering** module of the [Data Scientist Nanodegree of Udacity](https://www.udacity.com/course/data-scientist-nanodegree--nd025?promo=year_end&coupon=SAVE40&utm_source=gsem_brand&utm_source=gsem_brand&utm_medium=ads_r&utm_medium=ads_r&utm_campaign=19167921312_c_individuals&utm_campaign=19167921312_c_individuals&utm_term=143524475679&utm_term=143524475679&utm_keyword=udacity%20data%20science_e&utm_keyword=udacity%20data%20science_e&gad_source=1&gclid=EAIaIQobChMImKz0y_e0gwMVfj4GAB1FgAEHEAAYASAAEgI-h_D_BwE).
 
+The goal of this project is to generate a ML model that predicts the categories of a text message. There is a list of 36 different categories, and each message can have multiple categories.
+
+Specifically, the data used is from messages received during disasters. Categorizing this messages can help the disaster response teams as each category will be relevant for different teams. A good categorization of the messages can lead to quicker and more efective responses to disasters.
+
+To achieve this goal, the data stored in CSV files is managed using an ETL pipeline that will result in a SQLite database. This database will be used to create, train and evaluate a ML model.
+
+The results of the model and a few visualizations of the database can be seen in a web app created with Flask.
 
 ## Instructions:
 Run the following commands in the project's root directory to set up your database and model.
@@ -30,9 +37,9 @@ Run the following commands in the project's root directory to set up your databa
     - To run ML pipeline that trains classifier and saves
         `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
 
-Go to 'app' directory: 'cd app'
+Go to `app` directory: `cd app`
 
-Run your web app: `python run.py`
+Run web app: `python run.py`
 
 Click the `PREVIEW` button to open the homepage
 
