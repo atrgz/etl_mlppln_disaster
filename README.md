@@ -21,15 +21,20 @@ This project is written in Python 3.6.3 using the following  libraries:
 ## Project Motivations
 This work is the result of the project for the **Data Engineering** module of the [Data Scientist Nanodegree of Udacity](https://www.udacity.com/course/data-scientist-nanodegree--nd025?promo=year_end&coupon=SAVE40&utm_source=gsem_brand&utm_source=gsem_brand&utm_medium=ads_r&utm_medium=ads_r&utm_campaign=19167921312_c_individuals&utm_campaign=19167921312_c_individuals&utm_term=143524475679&utm_term=143524475679&utm_keyword=udacity%20data%20science_e&utm_keyword=udacity%20data%20science_e&gad_source=1&gclid=EAIaIQobChMImKz0y_e0gwMVfj4GAB1FgAEHEAAYASAAEgI-h_D_BwE).
 
-### 1. Business Understanding and Data Understanding:
 
-### 2. Data Preparation:
+## Instructions:
+Run the following commands in the project's root directory to set up your database and model.
 
-### 3. Data Modelling:
+    - To run ETL pipeline that cleans data and stores in database
+        `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
+    - To run ML pipeline that trains classifier and saves
+        `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
 
-### 4. Result evaluation:
+Go to 'app' directory: 'cd app'
 
-### 5. Deployment:
+Run your web app: `python run.py`
+
+Click the `PREVIEW` button to open the homepage
 
 ## File Descriptions
 The file structure of the projects is as follows:
