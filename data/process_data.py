@@ -58,14 +58,14 @@ def save_data(df, database_filename):
     INPUT:
     df: dataframe containing the data.
     database_filename: the name of the database provided by the user.
-    Will be created if doesn't exists, and a new table name "Messages" will be crated.
-    If the database exists and contains a table called "Messages" the program gives an error.
+    Will be created if doesn't exists, and a new table name "Message" will be crated.
+    If the database exists and contains a table called "Message" the program gives an error.
 
     OUTPUT:
     None
     """
     engine = create_engine(f'sqlite:///{database_filename}')
-    df.to_sql('Messages', engine, index=False)
+    df.to_sql('Message', engine, index=False)
 
 
 def main():
