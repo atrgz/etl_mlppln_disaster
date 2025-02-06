@@ -41,14 +41,13 @@ python data/process_data.py data/disaster_messages.csv data/disaster_categories.
 ```bash
 python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl
 ```
-2. To launch the web app, go to `app` directory
-
+2. To launch the web app
+* go to `app` directory
 * Once in the app directory, run web app
 ```bash
 python run.py
 ```
-
-Click the `PREVIEW` button to open the homepage
+* Open your browser and navigate to [http://127.0.0.1:3000/](http://127.0.0.1:3000/)
 
 ## File Descriptions
 The file structure of the projects is as follows:
