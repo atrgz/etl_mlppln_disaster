@@ -20,6 +20,7 @@ def load_data(messages_filepath, categories_filepath):
     """
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
+    # Merge both dataframes using common id
     df = messages.merge(categories, how='outer', on='id')
     return df
 
@@ -39,10 +40,12 @@ def clean_data(df):
     genre (the channel in which arrived the message),
     36 columns (one per category) with 1s and 0s.
     """
-    # save the name of the category
+    # split the name of the categories
     categories = df['categories'].str.split(';', expand=True)
     row = categories.iloc[0]
+    # get rid of the 0 or 1 attached to the name
     category_colnames = row.apply(lambda x: x[:-2])
+    # rename columns of the dataframe
     categories.columns = category_colnames
     
     for column in categories:

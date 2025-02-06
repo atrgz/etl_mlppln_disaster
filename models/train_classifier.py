@@ -31,8 +31,11 @@ def load_data(database_filepath):
     """
     engine = create_engine(f'sqlite:///{database_filepath}')
     df = pd.read_sql_table('Message', engine)
+    # load text message values to X as features
     X = df.message.values
+    # load numeric columns (categories) to Y as targets
     Y = df.drop(columns=['id', 'message', 'original', 'genre']).values
+    # create a list of category names to use later
     category_names = df.drop(columns=['id', 'message', 'original', 'genre']).columns.tolist()
     
     return (X, Y, category_names)
@@ -47,11 +50,13 @@ def tokenize(text):
     OUTPUT:
     clean_tokens: an array containing the tokenization of the text input
     """
-    text = re.sub(r"[^a-zA-Z0-9]", " ", text.lower()) # keep only letters and numbers, normalize to lower case
+    # keep only letters and numbers, normalize to lower case
+    text = re.sub(r"[^a-zA-Z0-9]", " ", text.lower()) 
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
     
-    tokens = [t for t in tokens if t not in stopwords.words("english")] # get rid of stop words
+    # get rid of stop words
+    tokens = [t for t in tokens if t not in stopwords.words("english")] 
 
     clean_tokens = []
     for tok in tokens:
@@ -71,7 +76,7 @@ def build_model():
     cv: ML model
     """
     pipeline = Pipeline([
-        ('vect', CountVectorizer(tokenizer=tokenize, token_pattern=None)),
+        ('vect', CountVectorizer(tokenizer=tokenize, token_pattern=None)), # token_ pattern set to none to avoid warning
         ('tfidf', TfidfTransformer()),
         ('clf', MultiOutputClassifier(RandomForestClassifier())),
     ])
@@ -100,10 +105,11 @@ def evaluate_model(model, X_test, Y_test, category_names):
     OUTPUT:
     None
     """
-    Y_pred = model.predict(X_test) # make predictions using the model
+    # make predictions using the model
+    Y_pred = model.predict(X_test) 
     # interate each category to evaluate model
     for i, category in enumerate(category_names):
-        report = classification_report(Y_test[:, i], Y_pred[:, i], output_dict=True, zero_division=0)
+        report = classification_report(Y_test[:, i], Y_pred[:, i], output_dict=True, zero_division=0) # zero_division to 0 to avoid precision warning
         precision = report['weighted avg']['precision']
         recall = report['weighted avg']['recall']
         f1_score = report['weighted avg']['f1-score']
