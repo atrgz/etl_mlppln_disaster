@@ -78,12 +78,12 @@ def build_model():
     
     
     parameters = {
-        'vect__ngram_range': ((1, 1), (1, 2)),
         'clf__estimator__n_estimators': [10, 50, 100],
         'clf__estimator__min_samples_split': [2, 3, 4]
     }
     
-    cv = GridSearchCV(pipeline, param_grid=parameters)
+    # This is a long process, verbose will print the current step
+    cv = GridSearchCV(pipeline, param_grid=parameters, verbose=2, n-jobs=-1)
     
     return cv
 
@@ -102,16 +102,13 @@ def evaluate_model(model, X_test, Y_test, category_names):
     """
     Y_pred = model.predict(X_test) # make predictions using the model
     # interate each category to evaluate model
-    for i in range(Y_pred.shape[1]):
-        report = classification_report(Y_test[:, i], Y_pred[:, i])
-        # Extract results line manually. Jupyter and IDE in Udacity works with an old version of sklearn. Newer versions allow to get the report as a dictionary.
-        lines = report.split("\n")
-        avg_line = [line for line in lines if "avg / total" in line]
-        if avg_line:
-            values = avg_line[0].split()  # Split the line into values
-            precision, recall, f1_score = float(values[3]), float(values[4]), float(values[5])
-            print(f"{category_names[i]}\n \tPrecision: {precision:.4f}, \tRecall: {recall:.4f}, \tF1-Score: {f1_score:.4f}\n")
-
+    for i, category in enumerate(category_names):
+        report = classification_report(Y_test[:, i], Y_pred[:, i], output_dict=True, zero_division=0)
+        precision = report['weighted avg']['precision']
+        recall = report['weighted avg']['recall']
+        f1_score = report['weighted avg']['f1-score']
+        
+        print(f"{category} \n \tPrecision: {precision:.4f}, \tRecall: {recall:.4f}, \tF1-Score: {f1_score:.4f}\n")
 
 def save_model(model, model_filepath):
     """Save the model to a pickle file
