@@ -83,7 +83,7 @@ def build_model():
     }
     
     # This is a long process, verbose will print the current step
-    cv = GridSearchCV(pipeline, param_grid=parameters, verbose=2, n-jobs=-1)
+    cv = GridSearchCV(pipeline, param_grid=parameters, verbose=2, n_jobs=-1)
     
     return cv
 
