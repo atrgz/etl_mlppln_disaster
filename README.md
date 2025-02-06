@@ -13,7 +13,7 @@ This project is written in Python 3.6.3 using the following  libraries:
 * pandas 0.23.3
 * sqlalchemy 1.1.13
 * nltk 3.2.5
-* sklearn 0.19.1
+* scikit-learn 1.6.1
 * pickle 4.0
 * re 2.2.1
 * plotly 2.0.15

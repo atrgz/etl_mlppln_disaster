@@ -1,18 +1,18 @@
 # Import libraries
 import sys
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect
 
 def load_data(messages_filepath, categories_filepath):
     """Load and merge the data from two CSV files to a dataframe.
 
     INPUT:
     messages_filepath: CSV file containing the messages received by the disaster recovery teams.
-    The file has 4 colums; id (message id), message (message text in English), 
-    original (message in the language it was received or blank if it was originaly in English),
+    The file has 4 columns; id (message id), message (message text in English), 
+    original (message in the language it was received or blank if it was originally in English),
     genre (the channel in which arrived the message).
     categories_filepath: CSV file containing the categories of the messages received.
-    The file has 2 colums; id (the matching id of the message), 
+    The file has 2 columns; id (the matching id of the message), 
     categories (a list of the 36 available categories with a 1 or a 0 at the end).
 
     OUTPUT:
@@ -39,17 +39,35 @@ def clean_data(df):
     genre (the channel in which arrived the message),
     36 columns (one per category) with 1s and 0s.
     """
+    # save the name of the category
     categories = df['categories'].str.split(';', expand=True)
     row = categories.iloc[0]
     category_colnames = row.apply(lambda x: x[:-2])
     categories.columns = category_colnames
     
     for column in categories:
+        # set each value to be the last character of the string
         categories[column] = categories[column].apply(lambda x: x[-1])
+        # convert column from string to numeric
         categories[column] = categories[column].astype(int)
+
+        # Drop rows where the column is not 0 or 1
+        invalid_rows = categories[~categories[column].isin([0, 1])].index
+        if len(invalid_rows) > 0:
+            print(f"Dropping {len(invalid_rows)} rows due to invalid values in column '{column}'.")
+            categories = categories.drop(invalid_rows)
+            df = df.drop(invalid_rows)
     
+    # Drop old 'categories' column and attach new categories (0, 1) columns
     df.drop('categories', axis=1, inplace=True)
     df = pd.concat([df, categories], axis=1)
+    
+    # Count and print how many duplicate rows exist before dropping
+    duplicate_count = df.duplicated().sum()
+    if duplicate_count > 0:
+        print(f"Dropping {duplicate_count} duplicate rows.")
+    
+    # Drop duplicates
     df.drop_duplicates(inplace=True)
     return df
 
@@ -66,7 +84,13 @@ def save_data(df, database_filename):
     None
     """
     engine = create_engine(f'sqlite:///{database_filename}')
-    df.to_sql('Message', engine, index=False)
+
+    # Check if the table Message exists
+    inspector = inspect(engine)
+    if 'Message' in inspector.get_table_names():
+        print(f"There is a table Message already in the database, it will be overwritten.'{database_filename}'. It will be overwritten.")
+
+    df.to_sql('Message', engine, if_exists='replace', index=False)
 
 
 def main():
