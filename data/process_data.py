@@ -88,7 +88,7 @@ def save_data(df, database_filename):
     # Check if the table Message exists
     inspector = inspect(engine)
     if 'Message' in inspector.get_table_names():
-        print(f"There is a table Message already in the database, it will be overwritten.'{database_filename}'. It will be overwritten.")
+        print(f"There is a table Message already in database:'{database_filename}'. It will be overwritten.")
 
     df.to_sql('Message', engine, if_exists='replace', index=False)
 
